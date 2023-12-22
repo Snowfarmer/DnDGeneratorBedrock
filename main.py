@@ -17,6 +17,7 @@ partyNumbers=input("How many party members are there?  ->   ")
 partyList=input("List the party members in a Class  level format. Use , to seperate each member.  ->   ")
 partyAligment=input("What is the overall Alingment of the party?  ->   ")
 location=input("Where is this encounter taking place?  ->   ")
+lanTrans = input("Translate it into another language? Enter the language code to translate here or leave blank.   ->   ")
 ###
 #diffculty ="moderate"
 #partyNumbers="4"
@@ -56,6 +57,18 @@ outputText = response_body.get('results')[0].get('outputText')
 print(outputText)
 
 splitOutput = outputText.splitlines()
+
+#translate text
+if lanTrans == "":
+    print("No language selected")
+else:
+    print("Translating")
+    translate = boto3.client(service_name='translate', use_ssl=True)
+    result = translate.translate_text(Text=outputText, 
+                SourceLanguageCode="en", TargetLanguageCode=lanTrans)
+    print('TranslatedText: ' + result.get('TranslatedText'))
+    print('SourceLanguageCode: ' + result.get('SourceLanguageCode'))
+    print('TargetLanguageCode: ' + result.get('TargetLanguageCode'))
 
 #Image process
 print("GENERATING ENCOUNTER IMAGE")
